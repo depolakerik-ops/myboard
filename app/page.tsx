@@ -5,12 +5,11 @@ const apps = [
     slug: "habit-tracker",
     name: "Habit Tracker",
     emoji: "🔥",
-    desc: "Buduj návyky",
+    desc: "Buduj návyky deň po dni",
     accent: "#FF6B35",
-    bg: "#FFF3EE",
-    bgDark: "#2D1A10",
-    span: "col-span-2",
-    tall: true,
+    gridColumn: "span 2",
+    minHeight: 180,
+    gradient: "linear-gradient(135deg, #FF6B3522 0%, #FF9F0A11 100%)",
   },
   {
     slug: "budget",
@@ -18,10 +17,9 @@ const apps = [
     emoji: "💸",
     desc: "Príjmy & výdavky",
     accent: "#34C759",
-    bg: "#EDFAF1",
-    bgDark: "#0D2116",
-    span: "col-span-1",
-    tall: false,
+    gridColumn: "span 1",
+    minHeight: 160,
+    gradient: "linear-gradient(135deg, #34C75922 0%, #30D15811 100%)",
   },
   {
     slug: "notes",
@@ -29,10 +27,9 @@ const apps = [
     emoji: "📝",
     desc: "Rýchle myšlienky",
     accent: "#FF9F0A",
-    bg: "#FFF8EC",
-    bgDark: "#2B1D00",
-    span: "col-span-1",
-    tall: false,
+    gridColumn: "span 1",
+    minHeight: 160,
+    gradient: "linear-gradient(135deg, #FF9F0A22 0%, #FF6B3511 100%)",
   },
   {
     slug: "mood",
@@ -40,10 +37,9 @@ const apps = [
     emoji: "🌙",
     desc: "Ako sa cítim",
     accent: "#BF5AF2",
-    bg: "#F5EEFF",
-    bgDark: "#1E0B2E",
-    span: "col-span-1",
-    tall: false,
+    gridColumn: "span 1",
+    minHeight: 160,
+    gradient: "linear-gradient(135deg, #BF5AF222 0%, #9B59B611 100%)",
   },
   {
     slug: "focus",
@@ -51,10 +47,9 @@ const apps = [
     emoji: "⏱️",
     desc: "Pomodoro timer",
     accent: "#FF375F",
-    bg: "#FFEEF1",
-    bgDark: "#2D0A10",
-    span: "col-span-1",
-    tall: false,
+    gridColumn: "span 1",
+    minHeight: 160,
+    gradient: "linear-gradient(135deg, #FF375F22 0%, #FF6B3511 100%)",
   },
   {
     slug: "bookmarks",
@@ -62,93 +57,121 @@ const apps = [
     emoji: "🔖",
     desc: "Uložené linky",
     accent: "#0A84FF",
-    bg: "#EAF4FF",
-    bgDark: "#001D35",
-    span: "col-span-2",
-    tall: false,
+    gridColumn: "span 2",
+    minHeight: 120,
+    gradient: "linear-gradient(135deg, #0A84FF22 0%, #5AC8FA11 100%)",
   },
 ];
 
 export default function Home() {
   const now = new Date();
   const hour = now.getHours();
-  const greeting = hour < 5 ? "Dobrú noc" : hour < 12 ? "Dobré ráno" : hour < 18 ? "Dobrý deň" : "Dobrý večer";
+  const greeting =
+    hour < 5 ? "Dobrú noc" : hour < 12 ? "Dobré ráno" : hour < 18 ? "Dobrý deň" : "Dobrý večer";
 
   return (
-    <main style={{ minHeight: "100vh", padding: "0 0 40px 0" }}>
+    <main style={{ minHeight: "100vh", paddingBottom: 48 }}>
       {/* Header */}
-      <div style={{ padding: "60px 20px 24px" }}>
-        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 6, fontWeight: 500 }}>
+      <div style={{ padding: "64px 20px 28px" }}>
+        <p style={{ fontSize: 14, color: "var(--muted)", marginBottom: 4, fontWeight: 500 }}>
           {now.toLocaleDateString("sk-SK", { weekday: "long", day: "numeric", month: "long" })}
         </p>
-        <h1 style={{ fontSize: 34, fontWeight: 700, letterSpacing: "-0.5px", lineHeight: 1.1 }}>
+        <h1 style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-0.8px", lineHeight: 1.1 }}>
           {greeting} 👋
         </h1>
-        <p style={{ fontSize: 15, color: "var(--muted)", marginTop: 6 }}>Tvoja osobná nástenka</p>
+        <p style={{ fontSize: 15, color: "var(--muted)", marginTop: 6, fontWeight: 400 }}>
+          Tvoja osobná nástenka
+        </p>
       </div>
 
       {/* Bento Grid */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 12,
-        padding: "0 16px",
-        maxWidth: 600,
-        margin: "0 auto",
-      }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 14,
+          padding: "0 16px",
+        }}
+      >
         {apps.map((app) => (
           <Link
             key={app.slug}
             href={`/apps/${app.slug}`}
-            className="card"
             style={{
-              gridColumn: app.span,
-              minHeight: app.tall ? 200 : 160,
-              padding: 20,
+              gridColumn: app.gridColumn,
+              minHeight: app.minHeight,
+              background: "var(--surface)",
+              borderRadius: 22,
+              border: "1px solid var(--border)",
+              boxShadow: "var(--shadow)",
+              padding: "22px 20px",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
+              position: "relative",
+              overflow: "hidden",
+              textDecoration: "none",
+              color: "inherit",
+              WebkitTapHighlightColor: "transparent",
+              transition: "transform 0.15s ease",
             }}
           >
-            {/* Color tint bg */}
+            {/* Gradient bg */}
             <div style={{
               position: "absolute", inset: 0,
-              background: `linear-gradient(135deg, ${app.accent}15 0%, transparent 60%)`,
+              background: app.gradient,
               pointerEvents: "none",
             }} />
 
-            <div style={{ position: "relative" }}>
+            {/* Top: emoji + text */}
+            <div style={{ position: "relative", display: "flex", alignItems: "flex-start", gap: 14 }}>
               <div style={{
-                width: 48, height: 48,
-                borderRadius: 14,
+                width: 52, height: 52, flexShrink: 0,
+                borderRadius: 16,
                 background: `${app.accent}20`,
+                border: `1px solid ${app.accent}30`,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: 24,
-                marginBottom: 12,
+                fontSize: 26,
               }}>
                 {app.emoji}
               </div>
-              <div style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-0.2px" }}>{app.name}</div>
-              <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 3 }}>{app.desc}</div>
+              <div style={{ paddingTop: 2 }}>
+                <div style={{ fontSize: 17, fontWeight: 650, letterSpacing: "-0.3px", lineHeight: 1.2 }}>
+                  {app.name}
+                </div>
+                <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 3, lineHeight: 1.3 }}>
+                  {app.desc}
+                </div>
+              </div>
             </div>
 
+            {/* Bottom: open arrow */}
             <div style={{
               position: "relative",
-              fontSize: 13,
-              fontWeight: 600,
-              color: app.accent,
-              display: "flex", alignItems: "center", gap: 4,
+              marginTop: 16,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
             }}>
-              Otvoriť <span style={{ fontSize: 16 }}>›</span>
+              <div style={{
+                width: 32, height: 32,
+                borderRadius: 10,
+                background: `${app.accent}18`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 18,
+                color: app.accent,
+                fontWeight: 700,
+              }}>
+                ›
+              </div>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* Footer */}
-      <div style={{ textAlign: "center", marginTop: 32, fontSize: 12, color: "var(--muted)" }}>
+      <p style={{ textAlign: "center", marginTop: 36, fontSize: 12, color: "var(--muted)" }}>
         myboard · built with Claude 🤖
-      </div>
+      </p>
     </main>
   );
 }

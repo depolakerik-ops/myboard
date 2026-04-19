@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
+const ACCENT = "#FF9F0A";
 interface Note { id: number; text: string; date: string; }
 
 export default function Notes() {
@@ -16,42 +17,36 @@ export default function Notes() {
     setInput("");
   };
 
-  const remove = (id: number) => setNotes(notes.filter((n) => n.id !== id));
-
   return (
-    <main className="min-h-screen p-6 md:p-10 max-w-2xl mx-auto">
-      <Link href="/" className="text-sm mb-8 inline-flex items-center gap-1" style={{ color: "var(--muted)" }}>
-        ← Späť na dashboard
-      </Link>
-
-      <h1 className="text-3xl font-bold mb-6">📝 Quick Notes</h1>
-
-      <div className="flex gap-3 mb-6">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && add()}
-          placeholder="Nová myšlienka..."
-          className="flex-1 px-4 py-3 rounded-2xl text-sm outline-none"
-          style={{ background: "var(--surface)", border: "1px solid var(--border)", color: "var(--text)" }}
-        />
-        <button
-          onClick={add}
-          className="px-5 py-3 rounded-2xl text-sm font-medium"
-          style={{ background: "var(--accent)", color: "#fff" }}
-        >
-          Pridať
-        </button>
+    <main style={{ minHeight: "100vh", paddingBottom: 40 }}>
+      <div style={{ padding: "60px 20px 20px" }}>
+        <Link href="/" style={{ fontSize: 15, color: ACCENT, display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 20 }}>
+          ‹ Späť
+        </Link>
+        <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: "-0.5px" }}>📝 Quick Notes</h1>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div style={{ padding: "0 16px", display: "flex", gap: 10, marginBottom: 16 }}>
+        <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && add()}
+          placeholder="Nová myšlienka..." style={{
+            flex: 1, padding: "14px 16px", borderRadius: 14, border: "1px solid var(--border)",
+            background: "var(--surface)", color: "var(--text)", fontSize: 15, outline: "none",
+          }} />
+        <button onClick={add} style={{
+          padding: "14px 20px", borderRadius: 14, border: "none", background: ACCENT,
+          color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer",
+        }}>+</button>
+      </div>
+
+      <div style={{ padding: "0 16px", display: "flex", flexDirection: "column", gap: 10 }}>
         {notes.map((note) => (
-          <div key={note.id} className="card p-4 flex justify-between items-start gap-3">
+          <div key={note.id} className="card" style={{ padding: "16px 18px", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12 }}>
             <div>
-              <p className="text-sm">{note.text}</p>
-              <p className="text-xs mt-1" style={{ color: "var(--muted)" }}>{note.date}</p>
+              <p style={{ fontSize: 15 }}>{note.text}</p>
+              <p style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>{note.date}</p>
             </div>
-            <button onClick={() => remove(note.id)} className="text-xs" style={{ color: "var(--muted)" }}>✕</button>
+            <button onClick={() => setNotes(notes.filter(n => n.id !== note.id))}
+              style={{ background: "none", border: "none", color: "var(--muted)", fontSize: 18, cursor: "pointer", padding: "0 4px" }}>×</button>
           </div>
         ))}
       </div>

@@ -5,140 +5,148 @@ const apps = [
     slug: "habit-tracker",
     name: "Habit Tracker",
     emoji: "🔥",
-    desc: "Buduj návyky deň po dni",
-    color: "#7c6af7",
-    glow: "#7c6af7",
-    span: "col-span-2 row-span-2",
+    desc: "Buduj návyky",
+    accent: "#FF6B35",
+    bg: "#FFF3EE",
+    bgDark: "#2D1A10",
+    span: "col-span-2",
+    tall: true,
   },
   {
     slug: "budget",
     name: "Budget",
     emoji: "💸",
     desc: "Príjmy & výdavky",
-    color: "#38d9a9",
-    glow: "#38d9a9",
-    span: "col-span-1 row-span-1",
+    accent: "#34C759",
+    bg: "#EDFAF1",
+    bgDark: "#0D2116",
+    span: "col-span-1",
+    tall: false,
   },
   {
     slug: "notes",
-    name: "Quick Notes",
+    name: "Notes",
     emoji: "📝",
     desc: "Rýchle myšlienky",
-    color: "#e879a0",
-    glow: "#e879a0",
-    span: "col-span-1 row-span-1",
+    accent: "#FF9F0A",
+    bg: "#FFF8EC",
+    bgDark: "#2B1D00",
+    span: "col-span-1",
+    tall: false,
   },
   {
     slug: "mood",
-    name: "Mood Log",
+    name: "Mood",
     emoji: "🌙",
-    desc: "Ako sa cítim každý deň",
-    color: "#f59e0b",
-    glow: "#f59e0b",
-    span: "col-span-1 row-span-1",
+    desc: "Ako sa cítim",
+    accent: "#BF5AF2",
+    bg: "#F5EEFF",
+    bgDark: "#1E0B2E",
+    span: "col-span-1",
+    tall: false,
+  },
+  {
+    slug: "focus",
+    name: "Focus",
+    emoji: "⏱️",
+    desc: "Pomodoro timer",
+    accent: "#FF375F",
+    bg: "#FFEEF1",
+    bgDark: "#2D0A10",
+    span: "col-span-1",
+    tall: false,
   },
   {
     slug: "bookmarks",
     name: "Bookmarks",
     emoji: "🔖",
-    desc: "Linky ktoré nechcem stratiť",
-    color: "#38bdf8",
-    glow: "#38bdf8",
-    span: "col-span-1 row-span-1",
-  },
-  {
-    slug: "focus",
-    name: "Focus Timer",
-    emoji: "⏱️",
-    desc: "Pomodoro & deep work",
-    color: "#f87171",
-    glow: "#f87171",
-    span: "col-span-2 row-span-1",
+    desc: "Uložené linky",
+    accent: "#0A84FF",
+    bg: "#EAF4FF",
+    bgDark: "#001D35",
+    span: "col-span-2",
+    tall: false,
   },
 ];
 
 export default function Home() {
   const now = new Date();
   const hour = now.getHours();
-  const greeting =
-    hour < 12 ? "Dobré ráno" : hour < 18 ? "Dobrý deň" : "Dobrý večer";
+  const greeting = hour < 5 ? "Dobrú noc" : hour < 12 ? "Dobré ráno" : hour < 18 ? "Dobrý deň" : "Dobrý večer";
 
   return (
-    <main className="min-h-screen p-6 md:p-10 max-w-5xl mx-auto">
+    <main style={{ minHeight: "100vh", padding: "0 0 40px 0" }}>
       {/* Header */}
-      <div className="mb-10">
-        <p className="text-sm mb-1" style={{ color: "var(--muted)" }}>
-          {now.toLocaleDateString("sk-SK", {
-            weekday: "long",
-            day: "numeric",
-            month: "long",
-          })}
+      <div style={{ padding: "60px 20px 24px" }}>
+        <p style={{ fontSize: 13, color: "var(--muted)", marginBottom: 6, fontWeight: 500 }}>
+          {now.toLocaleDateString("sk-SK", { weekday: "long", day: "numeric", month: "long" })}
         </p>
-        <h1 className="text-4xl font-bold tracking-tight">
-          {greeting}, Erik 👋
+        <h1 style={{ fontSize: 34, fontWeight: 700, letterSpacing: "-0.5px", lineHeight: 1.1 }}>
+          {greeting} 👋
         </h1>
-        <p className="mt-2 text-base" style={{ color: "var(--muted)" }}>
-          Tvoja osobná nástenka
-        </p>
+        <p style={{ fontSize: 15, color: "var(--muted)", marginTop: 6 }}>Tvoja osobná nástenka</p>
       </div>
 
       {/* Bento Grid */}
-      <div
-        className="grid gap-4"
-        style={{
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gridAutoRows: "180px",
-        }}
-      >
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 12,
+        padding: "0 16px",
+        maxWidth: 600,
+        margin: "0 auto",
+      }}>
         {apps.map((app) => (
           <Link
             key={app.slug}
             href={`/apps/${app.slug}`}
-            className={`card card-link ${app.span}`}
-            style={{ padding: "28px" }}
+            className="card"
+            style={{
+              gridColumn: app.span,
+              minHeight: app.tall ? 200 : 160,
+              padding: 20,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
           >
-            {/* Glow blob */}
-            <div
-              className="glow"
-              style={{
-                width: 200,
-                height: 200,
-                background: app.glow,
-                top: -60,
-                right: -60,
-              }}
-            />
+            {/* Color tint bg */}
+            <div style={{
+              position: "absolute", inset: 0,
+              background: `linear-gradient(135deg, ${app.accent}15 0%, transparent 60%)`,
+              pointerEvents: "none",
+            }} />
 
-            <div className="relative z-10 flex flex-col justify-between h-full">
-              <div>
-                <span
-                  className="inline-block text-3xl mb-3 p-3 rounded-2xl"
-                  style={{ background: `${app.color}22` }}
-                >
-                  {app.emoji}
-                </span>
-                <h2 className="text-xl font-semibold">{app.name}</h2>
-                <p className="text-sm mt-1" style={{ color: "var(--muted)" }}>
-                  {app.desc}
-                </p>
+            <div style={{ position: "relative" }}>
+              <div style={{
+                width: 48, height: 48,
+                borderRadius: 14,
+                background: `${app.accent}20`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                fontSize: 24,
+                marginBottom: 12,
+              }}>
+                {app.emoji}
               </div>
+              <div style={{ fontSize: 17, fontWeight: 600, letterSpacing: "-0.2px" }}>{app.name}</div>
+              <div style={{ fontSize: 13, color: "var(--muted)", marginTop: 3 }}>{app.desc}</div>
+            </div>
 
-              <div
-                className="text-xs font-medium flex items-center gap-1"
-                style={{ color: app.color }}
-              >
-                Otvoriť →
-              </div>
+            <div style={{
+              position: "relative",
+              fontSize: 13,
+              fontWeight: 600,
+              color: app.accent,
+              display: "flex", alignItems: "center", gap: 4,
+            }}>
+              Otvoriť <span style={{ fontSize: 16 }}>›</span>
             </div>
           </Link>
         ))}
       </div>
 
       {/* Footer */}
-      <div
-        className="mt-10 text-center text-xs"
-        style={{ color: "var(--muted)" }}
-      >
+      <div style={{ textAlign: "center", marginTop: 32, fontSize: 12, color: "var(--muted)" }}>
         myboard · built with Claude 🤖
       </div>
     </main>

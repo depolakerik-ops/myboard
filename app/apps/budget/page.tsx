@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
+const ACCENT = "#34C759";
 interface Entry { id: number; label: string; amount: number; type: "in" | "out"; }
 
 export default function Budget() {
@@ -14,8 +15,8 @@ export default function Budget() {
   const [amount, setAmount] = useState("");
   const [type, setType] = useState<"in" | "out">("out");
 
-  const income = entries.filter((e) => e.type === "in").reduce((s, e) => s + e.amount, 0);
-  const expense = entries.filter((e) => e.type === "out").reduce((s, e) => s + e.amount, 0);
+  const income = entries.filter(e => e.type === "in").reduce((s, e) => s + e.amount, 0);
+  const expense = entries.filter(e => e.type === "out").reduce((s, e) => s + e.amount, 0);
   const balance = income - expense;
 
   const add = () => {
@@ -25,52 +26,55 @@ export default function Budget() {
   };
 
   return (
-    <main className="min-h-screen p-6 md:p-10 max-w-2xl mx-auto">
-      <Link href="/" className="text-sm mb-8 inline-flex items-center gap-1" style={{ color: "var(--muted)" }}>
-        ← Späť na dashboard
-      </Link>
+    <main style={{ minHeight: "100vh", paddingBottom: 40 }}>
+      <div style={{ padding: "60px 20px 20px" }}>
+        <Link href="/" style={{ fontSize: 15, color: ACCENT, display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 20 }}>
+          ‹ Späť
+        </Link>
+        <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: "-0.5px" }}>💸 Budget</h1>
+      </div>
 
-      <h1 className="text-3xl font-bold mb-6">💸 Budget</h1>
-
-      {/* Summary cards */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      {/* Summary */}
+      <div style={{ padding: "0 16px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 16 }}>
         {[
-          { label: "Príjmy", val: income, color: "#38d9a9" },
-          { label: "Výdavky", val: expense, color: "#f87171" },
-          { label: "Zostatok", val: balance, color: balance >= 0 ? "#38d9a9" : "#f87171" },
-        ].map((s) => (
-          <div key={s.label} className="card p-4 text-center">
-            <p className="text-xs mb-1" style={{ color: "var(--muted)" }}>{s.label}</p>
-            <p className="text-xl font-bold" style={{ color: s.color }}>{s.val} €</p>
+          { label: "Príjmy", val: income, color: "#34C759" },
+          { label: "Výdavky", val: expense, color: "#FF375F" },
+          { label: "Zostatok", val: balance, color: balance >= 0 ? "#34C759" : "#FF375F" },
+        ].map(s => (
+          <div key={s.label} className="card" style={{ padding: "14px 12px", textAlign: "center" }}>
+            <p style={{ fontSize: 11, color: "var(--muted)", marginBottom: 4, fontWeight: 500 }}>{s.label}</p>
+            <p style={{ fontSize: 18, fontWeight: 700, color: s.color }}>{s.val}€</p>
           </div>
         ))}
       </div>
 
       {/* Add form */}
-      <div className="card p-4 mb-6 flex flex-wrap gap-3">
-        <input value={label} onChange={(e) => setLabel(e.target.value)} placeholder="Popis..."
-          className="flex-1 min-w-[120px] px-3 py-2 rounded-xl text-sm outline-none"
-          style={{ background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text)" }} />
-        <input value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="Suma €" type="number"
-          className="w-24 px-3 py-2 rounded-xl text-sm outline-none"
-          style={{ background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text)" }} />
-        <select value={type} onChange={(e) => setType(e.target.value as "in" | "out")}
-          className="px-3 py-2 rounded-xl text-sm outline-none"
-          style={{ background: "var(--surface-2)", border: "1px solid var(--border)", color: "var(--text)" }}>
-          <option value="out">Výdavok</option>
-          <option value="in">Príjem</option>
-        </select>
-        <button onClick={add} className="px-4 py-2 rounded-xl text-sm font-medium"
-          style={{ background: "var(--accent)", color: "#fff" }}>Pridať</button>
+      <div style={{ padding: "0 16px", marginBottom: 16 }}>
+        <div className="card" style={{ padding: 16, display: "flex", flexDirection: "column", gap: 10 }}>
+          <input value={label} onChange={e => setLabel(e.target.value)} placeholder="Popis transakcie..."
+            style={{ padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--surface-2)", color: "var(--text)", fontSize: 15, outline: "none" }} />
+          <div style={{ display: "flex", gap: 10 }}>
+            <input value={amount} onChange={e => setAmount(e.target.value)} placeholder="Suma €" type="number"
+              style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--surface-2)", color: "var(--text)", fontSize: 15, outline: "none" }} />
+            <select value={type} onChange={e => setType(e.target.value as "in" | "out")}
+              style={{ flex: 1, padding: "12px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--surface-2)", color: "var(--text)", fontSize: 15, outline: "none" }}>
+              <option value="out">Výdavok</option>
+              <option value="in">Príjem</option>
+            </select>
+          </div>
+          <button onClick={add} style={{ padding: "14px", borderRadius: 12, border: "none", background: ACCENT, color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+            Pridať
+          </button>
+        </div>
       </div>
 
       {/* Entries */}
-      <div className="flex flex-col gap-2">
-        {entries.map((e) => (
-          <div key={e.id} className="card p-4 flex justify-between items-center">
-            <span className="text-sm">{e.label}</span>
-            <span className="font-semibold text-sm" style={{ color: e.type === "in" ? "#38d9a9" : "#f87171" }}>
-              {e.type === "in" ? "+" : "-"}{e.amount} €
+      <div style={{ padding: "0 16px", display: "flex", flexDirection: "column", gap: 8 }}>
+        {entries.map(e => (
+          <div key={e.id} className="card" style={{ padding: "14px 18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontSize: 15 }}>{e.label}</span>
+            <span style={{ fontWeight: 700, fontSize: 16, color: e.type === "in" ? "#34C759" : "#FF375F" }}>
+              {e.type === "in" ? "+" : "-"}{e.amount}€
             </span>
           </div>
         ))}

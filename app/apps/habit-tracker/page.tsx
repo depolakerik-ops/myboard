@@ -4,71 +4,52 @@ import { useState } from "react";
 
 const HABITS = ["Cvičenie 💪", "Čítanie 📖", "Voda 💧", "Meditácia 🧘", "Bez cukru 🚫"];
 const DAYS = ["Po", "Ut", "St", "Št", "Pi", "So", "Ne"];
+const ACCENT = "#FF6B35";
 
 export default function HabitTracker() {
   const [checked, setChecked] = useState<Record<string, boolean>>({});
-
-  const toggle = (key: string) =>
-    setChecked((prev) => ({ ...prev, [key]: !prev[key] }));
-
+  const toggle = (key: string) => setChecked((p) => ({ ...p, [key]: !p[key] }));
   const total = Object.values(checked).filter(Boolean).length;
   const max = HABITS.length * DAYS.length;
+  const pct = Math.round((total / max) * 100);
 
   return (
-    <main className="min-h-screen p-6 md:p-10 max-w-3xl mx-auto">
-      <Link href="/" className="text-sm mb-8 inline-flex items-center gap-1" style={{ color: "var(--muted)" }}>
-        ← Späť na dashboard
-      </Link>
-
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold">🔥 Habit Tracker</h1>
-        <p className="mt-1 text-sm" style={{ color: "var(--muted)" }}>
-          Tento týždeň: {total}/{max} splnených
-        </p>
-        {/* Progress bar */}
-        <div className="mt-3 h-2 rounded-full" style={{ background: "var(--surface-2)" }}>
-          <div
-            className="h-2 rounded-full transition-all"
-            style={{ width: `${(total / max) * 100}%`, background: "var(--accent)" }}
-          />
+    <main style={{ minHeight: "100vh", paddingBottom: 40 }}>
+      <div style={{ padding: "60px 20px 20px" }}>
+        <Link href="/" style={{ fontSize: 15, color: ACCENT, display: "inline-flex", alignItems: "center", gap: 4, marginBottom: 20 }}>
+          ‹ Späť
+        </Link>
+        <h1 style={{ fontSize: 28, fontWeight: 700, letterSpacing: "-0.5px" }}>🔥 Habit Tracker</h1>
+        <p style={{ fontSize: 14, color: "var(--muted)", marginTop: 4 }}>Tento týždeň: {total}/{max} · {pct}%</p>
+        <div style={{ marginTop: 12, height: 6, borderRadius: 3, background: "var(--surface-2)", overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${pct}%`, background: ACCENT, borderRadius: 3, transition: "width 0.3s ease" }} />
         </div>
       </div>
 
-      <div className="card p-6">
-        <table className="w-full">
-          <thead>
-            <tr>
-              <th className="text-left pb-4 text-sm font-medium" style={{ color: "var(--muted)" }}>Návyk</th>
-              {DAYS.map((d) => (
-                <th key={d} className="pb-4 text-sm font-medium" style={{ color: "var(--muted)" }}>{d}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {HABITS.map((habit) => (
-              <tr key={habit} className="border-t" style={{ borderColor: "var(--border)" }}>
-                <td className="py-3 pr-4 text-sm">{habit}</td>
-                {DAYS.map((day) => {
-                  const key = `${habit}-${day}`;
-                  return (
-                    <td key={day} className="py-3 text-center">
-                      <button
-                        onClick={() => toggle(key)}
-                        className="w-8 h-8 rounded-xl transition-all text-sm"
-                        style={{
-                          background: checked[key] ? "var(--accent)" : "var(--surface-2)",
-                          border: checked[key] ? "none" : "1px solid var(--border)",
-                        }}
-                      >
-                        {checked[key] ? "✓" : ""}
-                      </button>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div style={{ padding: "0 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+        {HABITS.map((habit) => (
+          <div key={habit} className="card" style={{ padding: "16px 18px" }}>
+            <div style={{ fontSize: 15, fontWeight: 600, marginBottom: 12 }}>{habit}</div>
+            <div style={{ display: "flex", gap: 8, justifyContent: "space-between" }}>
+              {DAYS.map((day) => {
+                const key = `${habit}-${day}`;
+                return (
+                  <button key={day} onClick={() => toggle(key)} style={{
+                    flex: 1, height: 40, borderRadius: 10, border: "none", cursor: "pointer",
+                    background: checked[key] ? ACCENT : "var(--surface-2)",
+                    color: checked[key] ? "#fff" : "var(--muted)",
+                    fontSize: checked[key] ? 16 : 11,
+                    fontWeight: 600,
+                    transition: "all 0.15s ease",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    {checked[key] ? "✓" : day}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </div>
     </main>
   );

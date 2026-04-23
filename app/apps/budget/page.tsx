@@ -65,8 +65,6 @@ const INITIAL_DATA: Record<string, MonthData> = {
       { date:"2026-04-19", amount:-21.38,  category:"subscriptions", description:"Cursor predplatné" },
       { date:"2026-04-19", amount:-21.42,  category:"subscriptions", description:"Claude AI subscription" },
       { date:"2026-04-19", amount:-150,    category:"loans",         description:"Pôžička Laska" },
-      { date:"2026-04-20", amount:-21.38,  category:"subscriptions", description:"Cursor predplatné" },
-      { date:"2026-04-20", amount:-21.42,  category:"subscriptions", description:"Claude AI subscription" },
       { date:"2026-04-20", amount:-150,    category:"loans",         description:"Pôžička láska" },
       { date:"2026-04-20", amount:-6.97,   category:"food",          description:"Biomarkt potraviny" },
       { date:"2026-04-21", amount:-16.77,  category:"subscriptions", description:"Moonshot AI predplatné" },
